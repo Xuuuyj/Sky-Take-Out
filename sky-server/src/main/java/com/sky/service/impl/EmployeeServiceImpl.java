@@ -20,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -110,6 +111,38 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> result = employees.getResult();
 
         return new PageResult(total, result);
+    }
+
+    @Override
+    public void startOrStop(Integer status,Long id){
+        //注意 很多时候逻辑要清晰，最终数据库里面的内容是需要修改的，你这样仅仅是反馈到前端修改了
+        //builder是什么方法？？
+        //@builder构建器注解！！！
+        Employee employee = Employee.builder().status(status).id(id).build();
+
+        //更新操作时间
+        employee.setUpdateTime(LocalDateTime.now());
+        //更新操作者
+        employee.setUpdateUser(BaseContext.getCurrentId());
+
+        //mapper层更新数据库里面的内容
+        employeeMapper.update(employee);
+    }
+    public Employee getById(Long id){
+        Employee employee = employeeMapper.getById(id);
+        //设置密码不显示
+        employee.setPassword("****");
+        return employee;
+    }
+
+    public void update(EmployeeDTO employeeDTO){
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+
+        employeeMapper.update(employee);
     }
 
 }
