@@ -85,14 +85,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         //设置密码，默认123456，记得加密
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
 
-        //记录当前的修改时间以及创建时间
+
+        //已经通过公共字段自动填充进行了处理
+       /* //记录当前的修改时间以及创建时间
         employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
 
         //设置当前创始人id以及修改人的id，设置一个假数据即可，后面会进行修改
         //解决办法 ThreadLocal ,在拦截器里面讲empID存入，在这里面进行截取
         employee.setUpdateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        employee.setUpdateUser(BaseContext.getCurrentId());*/
 
 
         employeeMapper.insert(employee);
@@ -120,10 +122,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         //@builder构建器注解！！！
         Employee employee = Employee.builder().status(status).id(id).build();
 
-        //更新操作时间
+        //已经通过公共字段自动填充进行了处理
+        /*//更新操作时间
         employee.setUpdateTime(LocalDateTime.now());
         //更新操作者
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        employee.setUpdateUser(BaseContext.getCurrentId());*/
 
         //mapper层更新数据库里面的内容
         employeeMapper.update(employee);
@@ -139,8 +142,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO, employee);
 
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+        //已经通过公共字段自动填充进行了处理
+        /*employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());*/
 
         employeeMapper.update(employee);
     }
